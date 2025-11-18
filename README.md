@@ -58,4 +58,4 @@ npm run build
 - **Backend**: Node.js + Express
 - **Database**: MongoDB Atlas
 - **Styling**: CSS3
-- **Icons**: Font Awesome
+- **Icons**: Font Awesome"# cloudcart-mern" 
