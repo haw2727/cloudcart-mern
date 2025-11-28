@@ -82,7 +82,7 @@ CartProvider.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-const useCart = () => {
+export const useCart = () => {
   const context = useContext(CartContext)
   if (!context) {
     throw new Error('useCart must be used within a CartProvider')
@@ -90,4 +90,4 @@ const useCart = () => {
   return context
 }
 
-export { CartProvider, useCart }
+export default CartProvider
