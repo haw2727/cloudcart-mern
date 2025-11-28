@@ -29,34 +29,36 @@ export const CartProvider = ({ children }) => {
       alert('Please login to add items to cart')
       return false
     }
-    const existingItem = cart.find(item => item._id === product._id)
-    if (existingItem) {
-      setCart(cart.map(item => 
-        item._id === product._id 
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      ))
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }])
-    }
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item._id === product._id)
+      if (existingItem) {
+        return prevCart.map(item => 
+          item._id === product._id 
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      } else {
+        return [...prevCart, { ...product, quantity: 1 }]
+      }
+    })
     return true
-  }, [cart])
+  }, [])
 
   const removeFromCart = useCallback((productId) => {
-    setCart(cart.filter(item => item._id !== productId))
-  }, [cart])
+    setCart(prevCart => prevCart.filter(item => item._id !== productId))
+  }, [])
 
   const updateQuantity = useCallback((productId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(productId)
     } else {
-      setCart(cart.map(item => 
+      setCart(prevCart => prevCart.map(item => 
         item._id === productId 
           ? { ...item, quantity }
           : item
       ))
     }
-  }, [cart, removeFromCart])
+  }, [removeFromCart])
 
   const clearCart = useCallback(() => {
     setCart([])

@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { productService } from '../services/productService'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 
 const ProductDetail = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { addToCart } = useCart()
+  const { user } = useAuth()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -49,7 +51,7 @@ const ProductDetail = () => {
             <p className="product-stock">Stock: {product.stock}</p>
             <button 
               className="add-to-cart"
-              onClick={() => addToCart(product)}
+              onClick={() => addToCart(product, user)}
               disabled={product.stock === 0}
             >
               {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
