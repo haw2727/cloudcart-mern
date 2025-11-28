@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 
 const CartContext = createContext()
 
@@ -24,7 +24,7 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(cart))
   }, [cart])
 
-  const addToCart = (product, user) => {
+  const addToCart = useCallback((product, user) => {
     if (!user) {
       alert('Please login to add items to cart')
       return false
@@ -40,13 +40,13 @@ export const CartProvider = ({ children }) => {
       setCart([...cart, { ...product, quantity: 1 }])
     }
     return true
-  }
+  }, [cart])
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = useCallback((productId) => {
     setCart(cart.filter(item => item._id !== productId))
-  }
+  }, [cart])
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = useCallback((productId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(productId)
     } else {
@@ -56,19 +56,19 @@ export const CartProvider = ({ children }) => {
           : item
       ))
     }
-  }
+  }, [cart, removeFromCart])
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCart([])
-  }
+  }, [])
 
-  const getTotalPrice = () => {
+  const getTotalPrice = useCallback(() => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0)
-  }
+  }, [cart])
 
-  const getTotalItems = () => {
+  const getTotalItems = useCallback(() => {
     return cart.reduce((total, item) => total + item.quantity, 0)
-  }
+  }, [cart])
 
   const value = {
     cart,

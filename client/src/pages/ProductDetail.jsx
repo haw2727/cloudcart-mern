@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { productService } from '../services/productService'
 import { useCart } from '../context/CartContext'
@@ -11,11 +11,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    fetchProduct()
-  }, [id])
-
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true)
       const data = await productService.getProduct(id)
@@ -25,7 +21,11 @@ const ProductDetail = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [id])
+
+  useEffect(() => {
+    fetchProduct()
+  }, [fetchProduct])
 
   if (loading) return <div className="loading">Loading product...</div>
   if (error) return <div className="error">Error: {error}</div>

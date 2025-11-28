@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { authService } from '../services/authService'
 
 const AuthContext = createContext()
@@ -27,24 +27,24 @@ export const AuthProvider = ({ children }) => {
     }
   }, [])
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     const { user, token } = await authService.login(email, password)
     localStorage.setItem('token', token)
     setUser(user)
     return user
-  }
+  }, [])
 
-  const register = async (name, email, password) => {
+  const register = useCallback(async (name, email, password) => {
     const { user, token } = await authService.register(name, email, password)
     localStorage.setItem('token', token)
     setUser(user)
     return user
-  }
+  }, [])
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token')
     setUser(null)
-  }
+  }, [])
 
   const value = {
     user,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { orderService } from '../services/orderService'
 
@@ -10,11 +10,7 @@ const Payment = () => {
   const [receiptFile, setReceiptFile] = useState(null)
   const [transactionNumber, setTransactionNumber] = useState('')
 
-  useEffect(() => {
-    fetchOrder()
-  }, [orderId])
-
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
     try {
       const orders = await orderService.getOrders()
       const currentOrder = orders.find(o => o._id === orderId)
@@ -22,7 +18,11 @@ const Payment = () => {
     } catch (error) {
       console.error('Error fetching order:', error)
     }
-  }
+  }, [orderId])
+
+  useEffect(() => {
+    fetchOrder()
+  }, [fetchOrder])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
