@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useProducts } from '../hooks/useProducts'
+import { useAuth } from '../context/AuthContext'
 import ProductCard from '../components/ProductCard'
 
 const Home = () => {
   const { products, loading } = useProducts()
+  const { user } = useAuth()
 
   return (
     <div>
@@ -27,12 +29,14 @@ const Home = () => {
             >
               🛍️ Shop Now
             </Link>
-            <Link 
-              to="/register" 
-              className="border-2 border-white text-white px-10 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105"
-            >
-              Join Free
-            </Link>
+            {!user && (
+              <Link 
+                to="/register" 
+                className="border-2 border-white text-white px-10 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-blue-600 transition-all transform hover:scale-105"
+              >
+                Join Free
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -100,12 +104,21 @@ const Home = () => {
           <p className="text-xl mb-8 opacity-90">
             Join thousands of happy customers and experience the future of online shopping
           </p>
-          <Link 
-            to="/register" 
-            className="inline-block bg-white text-purple-600 px-10 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
-          >
-            Get Started Today
-          </Link>
+          {user ? (
+            <Link 
+              to="/products" 
+              className="inline-block bg-white text-purple-600 px-10 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+            >
+              Continue Shopping
+            </Link>
+          ) : (
+            <Link 
+              to="/register" 
+              className="inline-block bg-white text-purple-600 px-10 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+            >
+              Get Started Today
+            </Link>
+          )}
         </div>
       </section>
     </div>
