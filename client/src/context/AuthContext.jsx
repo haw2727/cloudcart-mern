@@ -4,28 +4,24 @@ import { authService } from '../services/authService'
 
 const AuthContext = createContext()
 
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
-
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      authService.getCurrentUser()
-        .then(setUser)
-        .catch(() => localStorage.removeItem('token'))
-        .finally(() => setLoading(false))
-    } else {
+    const initAuth = async () => {
+      const token = localStorage.getItem('token')
+      if (token) {
+        try {
+          const userData = await authService.getCurrentUser()
+          setUser(userData)
+        } catch (error) {
+          localStorage.removeItem('token')
+        }
+      }
       setLoading(false)
     }
+    initAuth()
   }, [])
 
   const login = useCallback(async (email, password) => {
@@ -65,3 +61,13 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired
 }
+
+const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
+}
+
+export { AuthProvider, useAuth }

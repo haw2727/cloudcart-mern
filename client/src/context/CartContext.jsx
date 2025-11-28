@@ -3,23 +3,11 @@ import PropTypes from 'prop-types'
 
 const CartContext = createContext()
 
-export const useCart = () => {
-  const context = useContext(CartContext)
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider')
-  }
-  return context
-}
-
-export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([])
-
-  useEffect(() => {
+const CartProvider = ({ children }) => {
+  const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('cart')
-    if (savedCart) {
-      setCart(JSON.parse(savedCart))
-    }
-  }, [])
+    return savedCart ? JSON.parse(savedCart) : []
+  })
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart))
@@ -93,3 +81,13 @@ export const CartProvider = ({ children }) => {
 CartProvider.propTypes = {
   children: PropTypes.node.isRequired
 }
+
+const useCart = () => {
+  const context = useContext(CartContext)
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider')
+  }
+  return context
+}
+
+export { CartProvider, useCart }
