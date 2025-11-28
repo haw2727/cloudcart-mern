@@ -327,8 +327,13 @@ const Admin = () => {
                     {order.paymentProof && (
                       <div className="mt-2">
                         <p className="text-sm font-medium text-blue-600">Payment Proof:</p>
-                        <a href={`${getServerUrl()}${order.paymentProof}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-sm">View Receipt</a>
-                        <p className="text-sm text-gray-600">Transaction: {order.transactionNumber}</p>
+                        <img 
+                          src={`${getServerUrl()}${order.paymentProof}`} 
+                          alt="Receipt" 
+                          className="w-32 h-32 object-cover rounded-lg border border-gray-300 mt-1 cursor-pointer hover:scale-105 transition-transform"
+                          onClick={() => window.open(`${getServerUrl()}${order.paymentProof}`, '_blank')}
+                        />
+                        <p className="text-sm text-gray-600 mt-1">Transaction: {order.transactionNumber}</p>
                       </div>
                     )}
                   </div>
