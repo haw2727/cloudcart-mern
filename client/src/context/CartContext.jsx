@@ -1,7 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext()
 
 const CartProvider = ({ children }) => {
@@ -83,7 +83,6 @@ CartProvider.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => {
   const context = useContext(CartContext)
   if (!context) {
