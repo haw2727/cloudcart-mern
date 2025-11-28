@@ -87,11 +87,14 @@ const Admin = () => {
   }, [])
 
   useEffect(() => {
-    if (activeTab === 'users') {
-      fetchUsers()
-    } else if (activeTab === 'orders') {
-      fetchOrders()
+    const loadData = async () => {
+      if (activeTab === 'users') {
+        await fetchUsers()
+      } else if (activeTab === 'orders') {
+        await fetchOrders()
+      }
     }
+    loadData()
   }, [activeTab, fetchUsers, fetchOrders])
 
   const handleDeleteUser = async (id) => {
